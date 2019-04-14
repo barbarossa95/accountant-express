@@ -14,7 +14,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "..", "accountant", "build")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+app.use("/api", apiRouter);
 
 module.exports = app;
