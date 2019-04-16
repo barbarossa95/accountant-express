@@ -1,20 +1,21 @@
-var express = require("express");
-var router = express.Router();
-
-var operationRouter = require("./operation");
+const express = require("express"),
+  router = express.Router(),
+  Operation = require("../../models/Operation"),
+  operationManager = new Operation();
 
 router
   .get("/", function(req, res) {
-    res.json(initOperations);
+    try {
+      operationManager.list().then(data => res.json(data));
+    } catch (error) {
+      res.sendStatus(500);
+    }
   })
   .post("/", function(req, res) {
-    const operation = req.body;
+    const data = req.body,
+      key = operationManager.create(data);
 
-    console.log("New operation posted");
-
-    console.log(operation);
-
-    res.json(operation);
+    res.json({ ...data, key });
   });
 
 module.exports = router;
