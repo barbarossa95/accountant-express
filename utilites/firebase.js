@@ -11,4 +11,51 @@ const config = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 };
 
-var app = firebase.initializeApp(config);
+var app = firebase.initializeApp(config),
+  database = app.database();
+
+const store = async model => {
+  const { ref } = model,
+    newModelRef = database.ref(ref).push();
+
+  model.key = newModelRef.key;
+  try {
+    await newModelRef.set(model.data);
+
+    return model;
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+const find = async model => {
+  const { ref, key } = model,
+    snapshot = await database.ref(`${ref}/${key}`).once("value"),
+    data = snapshot.val();
+
+  if (!data) return false;
+
+  model.data = data;
+
+  return true;
+};
+
+const get = async model => {
+  const { ref } = model,
+    snapshot = await database.ref(ref).once("value"),
+    data = snapshot.val();
+
+  if (!data) return [];
+
+  return Object.entries(data).map(([key, item]) => {
+    return { ...item, key };
+  });
+};
+
+module.exports = {
+  store,
+  find,
+  get
+};
