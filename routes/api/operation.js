@@ -15,7 +15,16 @@ router
     const data = req.body,
       key = operationManager.create(data);
 
-    res.json({ ...data, key });
+    res.json({ ...data, id: key });
+  })
+  .delete("/:id", function(req, res) {
+    try {
+      const id = req.params.id;
+
+      operationManager.remove(id).then(() => res.sendStatus(204));
+    } catch (error) {
+      res.sendStatus(500);
+    }
   });
 
 module.exports = router;

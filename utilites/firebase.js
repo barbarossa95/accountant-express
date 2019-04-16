@@ -50,12 +50,21 @@ const get = async model => {
   if (!data) return [];
 
   return Object.entries(data).map(([key, item]) => {
-    return { ...item, key };
+    return { ...item, id: key };
   });
+};
+
+const remove = async model => {
+  const { ref, key } = model;
+
+  await database.ref(`${ref}/${key}`).set(null);
+
+  return true;
 };
 
 module.exports = {
   store,
   find,
-  get
+  get,
+  remove
 };

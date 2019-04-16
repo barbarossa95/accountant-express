@@ -23,6 +23,14 @@ class Model {
     return false;
   }
 
+  async remove(key) {
+    this.key = key;
+
+    await this.firebase.remove(this);
+
+    return;
+  }
+
   async list() {
     return await this.firebase.get(this);
   }
