@@ -1,0 +1,96 @@
+@import '../../../assets/styles/variables.scss';
+
+.operation-list_item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  animation: slide-up 0.4s ease;
+
+  :last-child {
+    margin-bottom: 0;
+  }
+
+  .item_row {
+    display: inline-flex;
+    flex-wrap: wrap;
+
+    &.controls {
+      justify-content: flex-end;
+    }
+  }
+
+  &.debit {
+    background: $green;
+  }
+
+  &.credit {
+    background: $red;
+  }
+
+  .time {
+    position: relative;
+    display: inline-block;
+    width: intrinsic; /* Safari/WebKit используют нестандартное имя */
+    width: -moz-max-content; /* Firefox/Gecko */
+    width: -webkit-max-content; /* Chrome */
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+
+    .tooltip {
+      visibility: hidden;
+      background-color: black;
+      opacity: 0.9;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+      position: absolute;
+      width: 150px;
+      bottom: 100%;
+      left: 75%;
+      margin-left: -60px;
+      z-index: 1;
+    }
+
+    &:hover .tooltip {
+      visibility: visible;
+    }
+  }
+
+  &:hover {
+    .remove,
+    .edit {
+      opacity: 0.5;
+    }
+  }
+
+  .remove,
+  .edit {
+    opacity: 0;
+    user-select: none;
+
+    @media only screen and (max-width: 768px) {
+      opacity: 0.5;
+    }
+
+    &:hover,
+    &:active {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
